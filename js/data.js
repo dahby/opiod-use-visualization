@@ -25,7 +25,7 @@ let topTen = [];
 //   populateYear();
 // });
 
-d3.csv("./data/data.csv").then(function(data) {
+d3.csv("data.csv").then(function(data) {
   for (let i = 0; i < data.length; i++) {
     switch (data[i].sex_name) {
       case "Male":
