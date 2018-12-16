@@ -19,8 +19,9 @@ d3.csv("../data/data.csv").then(function(data) {
         populateData(maleOrFemale, data[i]);
     }
   }
-  findTopTen(males, 1995);
-  renderGraph(topTen);
+  // findTopTen(males, 1995);
+  // renderGraph(topTen);
+  // console.log(topTen);
   populateYear();
 });
 
@@ -38,6 +39,7 @@ const populateData = (obj, pos) => {
 
 // Finds top ten countries based on year
 const findTopTen = (obj, year) => {
+  topTen = [];
   for (let key in obj[year]) {
     const rate = parseFloat(obj[year][key]);
     topTen.push({ key, rate });
@@ -49,6 +51,7 @@ const findTopTen = (obj, year) => {
 }
 
 const renderGraph = (arr) => {
+  d3.selectAll('rect').remove();
   const barHeight = 20;
   const bar = d3.select('svg')
     .selectAll('rect')
@@ -70,24 +73,24 @@ const populateYear = () => {
     .append('option')
     .text(d => d)
     .attr('value', d => d);
-  console.log(Object.keys(maleOrFemale));
 }
 
 // d3.select('h3').style('color', 'darkblue');
 // d3.select('h3').style('font-size', '24px');
 
-// d3.select('#btn')
-//   .on('click', function () {
-//     d3.select('body')
-//       .append('h3')
-//       .text('Today is a beautiful day!!');
-//   });
+const generateVis = (e) => {
+  // findTopTen(females, 1992);
+  e.preventDefault();
+  // console.log(typeof e.target[1].value);
+  const gender = e.target[1].value === 'both' ? maleOrFemale : (e.target[1].value === 'female' ? females : males);
+  // console.log(gender);
+  findTopTen(gender, e.target[0].value);
+  console.log(topTen);
+  renderGraph(topTen);
+  // renderGraph(testing);
+}
 
-  // d3.select('ul')
-  //   .selectAll('li')
-  //   .data(dataArray)
-  //   .enter()
-  //   .append('li')
-  //   .text(function(d) { return d.location_name });
-  // console.log('finished');
-  // console.log(dataArray);
+const btn = document.getElementById('form');
+btn.addEventListener('submit', generateVis)
+// console.log(btn);
+

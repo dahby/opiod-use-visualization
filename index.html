@@ -8,14 +8,19 @@
   <title>Document</title>
 </head>
 <body>
-  <select id='yearDropDown'>
-    <option>Pick a year</option>
-  </select>
-  <!-- <button id='btn'>Show Message</button> -->
-  <!-- <ul class='test'>
-
-  </ul> -->
-  <svg width='500' height='1000'></svg>
+  <form id='form'>
+    <select id='yearDropDown' name='filter'>
+      <option>Pick a year</option>
+    </select>
+    <select id='genderDropDown' name='filter'>
+      <option>Filter By Gender</option>
+      <option value='male'>Male</option>
+      <option value='female'>Female</option>
+      <option value='both'>All</option>
+    </select>
+    <button id='btn' name='filter'>Generate Visualization</button>
+  </form>
+  <svg width='1000' height='1000'></svg>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="text/javascript" src="./js/data.js"></script>
