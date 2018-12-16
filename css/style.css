@@ -1,0 +1,12 @@
+* {
+  display: flex;
+}
+
+script {
+  visibility: hidden;
+}
+
+#btn {
+  height: 35px;
+
+}
