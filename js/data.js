@@ -6,26 +6,7 @@ const females = {};
 
 let topTen = [];
 
-// d3.csv("../data/data.csv").then(function(data) {
-//   for (let i = 0; i < data.length; i++) {
-//     switch (data[i].sex_name) {
-//       case "Male":
-//         populateData(males, data[i]);
-//         break;
-//       case "Female":
-//         populateData(females, data[i]);
-//         break;
-//       default:
-//         populateData(maleOrFemale, data[i]);
-//     }
-//   }
-//   // findTopTen(males, 1995);
-//   // renderGraph(topTen);
-//   // console.log(topTen);
-//   populateYear();
-// });
-
-d3.csv("./data/data.csv").then(function(data) {
+d3.csv("../data/data.csv").then(function(data) {
   for (let i = 0; i < data.length; i++) {
     switch (data[i].sex_name) {
       case "Male":
@@ -43,6 +24,25 @@ d3.csv("./data/data.csv").then(function(data) {
   // console.log(topTen);
   populateYear();
 });
+
+// d3.csv("./data/data.csv").then(function(data) {
+//   for (let i = 0; i < data.length; i++) {
+//     switch (data[i].sex_name) {
+//       case "Male":
+//         populateData(males, data[i]);
+//         break;
+//       case "Female":
+//         populateData(females, data[i]);
+//         break;
+//       default:
+//         populateData(maleOrFemale, data[i]);
+//     }
+//   }
+//   // findTopTen(males, 1995);
+//   // renderGraph(topTen);
+//   // console.log(topTen);
+//   populateYear();
+// });
 
 // Populates gender specific data in objects
 const populateData = (obj, pos) => {
