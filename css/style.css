@@ -1,12 +1,29 @@
 * {
   display: flex;
+  background-color: blue;
 }
 
 script {
   visibility: hidden;
 }
 
+style {
+  visibility: hidden;
+}
+
 #btn {
   height: 35px;
 
+}
+
+#form {
+  justify-content: center;
+  align-content: center;
+  background-color: green;
+}
+
+#chart {
+  display: flex;
+  height: 500px !important;
+  width: 800px !important;
 }
