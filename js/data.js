@@ -6,6 +6,7 @@ const females = {};
 
 let topTen = [];
 
+// Loads data from csv file
 d3.csv("data.csv").then(function(data) {
   for (let i = 0; i < data.length; i++) {
     switch (data[i].sex_name) {
@@ -19,30 +20,8 @@ d3.csv("data.csv").then(function(data) {
         populateData(maleOrFemale, data[i]);
     }
   }
-  // findTopTen(males, 1995);
-  // renderGraph(topTen);
-  // console.log(topTen);
   populateYear();
 });
-
-// d3.csv("./data/data.csv").then(function(data) {
-//   for (let i = 0; i < data.length; i++) {
-//     switch (data[i].sex_name) {
-//       case "Male":
-//         populateData(males, data[i]);
-//         break;
-//       case "Female":
-//         populateData(females, data[i]);
-//         break;
-//       default:
-//         populateData(maleOrFemale, data[i]);
-//     }
-//   }
-//   // findTopTen(males, 1995);
-//   // renderGraph(topTen);
-//   // console.log(topTen);
-//   populateYear();
-// });
 
 // Populates gender specific data in objects
 const populateData = (obj, pos) => {
@@ -69,21 +48,120 @@ const findTopTen = (obj, year) => {
   topTen = topTen.slice(0, 10);
 }
 
-const renderGraph = (arr) => {
-  d3.selectAll('rect').remove();
-  const barHeight = 20;
-  const bar = d3.select('svg')
-    .selectAll('rect')
-    .data(arr)
-    .enter()
-    .append('rect')
-    .attr('width', d => d.rate * 10)
-    .attr('height', barHeight - 1)
-    .attr('transform', function(d, i) {
-      return `translate(0,${i * barHeight})`
-    })
+// renders visualization to the page
+
+const chart = document.getElementById('chart');
+
+let rateChart;
+
+const renderChart = (data) => {
+  // chart.style.display = 'hide';
+  const ctx = document.getElementById('chart').getContext('2d');
+  const names = [];
+  const rates = [];
+  for (let i = 0; i < data.length; i++) {
+    names.push(data[i].key);
+    rates.push(data[i].rate);
+  }
+
+  rateChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: names,
+      datasets: [{
+        label: 'rate per 100k',
+        data: rates,
+        backgroundColor: '#6290C8'
+      }]
+    }
+  })
+
+  // chart.style.display = 'block';
+
+  // d3.selectAll('rect').remove();
+  // const barHeight = 50;
+  // const bar = d3.select('svg')
+
+  //   .selectAll('rect')
+  //   .data(data)
+  //   .enter()
+  //   .append('rect')
+  //   .attr('width', d => d.rate * 20)
+  //   .attr('height', 40)
+  //   .attr('class', 'bar')
+  //   .attr('transform', function(d, i) {
+  //     return `translate(0,${i * barHeight})`
+  //   });
+
+  // const text = d3.select('rect')
+  //   d3.selectAll('p')
+  //   .data(data)
+  //   .enter()
+  //   .append('p')
+  //   .text(d => d.key);
+
+  
+  // const svg = d3.select('svg');
+  // const margin = 200;
+  // const width = svg.attr('width') - margin;
+  // const height = svg.attr('height') - margin;
+
+  // svg.append('text')
+  //   .attr('transform', 'translate(100,0)')
+  //   .attr('x', 50)
+  //   .attr('y', 50)
+  //   .attr('font-size', '24px')
+  //   .text('Opiod Related Death Rate');
+
+  // const xScale = d3.scaleBand().range([0, width]).padding(0.4);
+  // const yScale = d3.scaleLinear().range([height, 0]);
+
+  // const g = svg.append('g')
+  //   .attr('transform', `translate(${100},${100})`);
+
+  // xScale.domain(data.map(d => d.key));
+  // yScale.domain([0, d3.max(data, d => d.rate)]);
+
+  // g.append('g')
+  //   .attr('transform', "translate(0," + height + ")")
+  //   .call(d3.axisBottom(xScale))
+  //   .append('text')
+  //   .attr('y', height - 250)
+  //   .attr('x', width - 100)
+  //   .attr('text-anchor', 'end')
+  //   .attr('stroke', 'black')
+  //   .text('Country');
+
+  // g.append('g')
+  //   .call(d3.axisLeft(yScale).tickFormat(d => d.rate).ticks(10))
+  //   .append('text')
+  //   .attr('transform', 'rotate(-90)')
+  //   .attr('y', 6)
+  //   .attr('dy', '-5.1em')
+  //   .attr('text-anchor', 'end')
+  //   .attr('stroke', 'black')
+  //   .text('Rate');
+
+  // console.log(data[0].rate);
+
+  // g.selectAll('.bar')
+  //   .data(data)
+  //   .enter()
+  //   .append('rect')
+  //   .attr('class', 'bar')
+  //   .attr('x', d => xScale(d.key))
+  //   .attr('y', d => yScale(d.rate * 1000))
+  //   .attr('width', xScale.bandwidth())
+  //   .attr('height', d => height - yScale(d.rate));
+
+
+
+  
+  // bar.append('text')
+  //   .text('LOCATION');
 }
 
+// populates drop down with years in study
 const populateYear = () => {
   d3.select('#yearDropDown')
     .selectAll('option')
@@ -94,22 +172,65 @@ const populateYear = () => {
     .attr('value', d => d);
 }
 
-// d3.select('h3').style('color', 'darkblue');
-// d3.select('h3').style('font-size', '24px');
-
+// generates visualization pages on values selected in drop down
 const generateVis = (e) => {
-  // findTopTen(females, 1992);
   e.preventDefault();
-  // console.log(typeof e.target[1].value);
   const gender = e.target[1].value === 'both' ? maleOrFemale : (e.target[1].value === 'female' ? females : males);
-  // console.log(gender);
   findTopTen(gender, e.target[0].value);
-  console.log(topTen);
-  renderGraph(topTen);
-  // renderGraph(testing);
+  if (rateChart) {
+    rateChart.destroy();
+  }
+  renderChart(topTen);
 }
 
 const btn = document.getElementById('form');
-btn.addEventListener('submit', generateVis)
-// console.log(btn);
+btn.addEventListener('submit', generateVis);
 
+  // const svgWidth = 600;
+  // const svgHeight = 400;
+  // const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+  // const width = svgWidth - margin.left - margin.right;
+  // const height = svgHeight - margin.top - margin.bottom;
+
+  // const svg = d3.select('svg')
+  //   .attr('width', svgWidth)
+  //   .attr('height', svgHeight);
+  
+  // const g = svg.append('g')
+  //   .attr('transform', `translate(${margin.left}, ${margin.top})`);
+  
+  // const x = d3.scaleTime().rangeRound([0, width]);
+  // const y = d3.scaleLinear().rangeRound([height, 0]);
+
+  // const line = d3.line()
+  //   .x(d => x(d.key))
+  //   .y(d => y(d.value))
+  //   x.domain(d3.extent(data, d => d.key))
+  //   y.domain(d3.extent(data, d => d.value));
+
+  // console.log(line);
+
+  // g.append('g')
+  //   .attr('transform', `translate(0, ${height})`)
+  //   .call(d3.axisBottom(x))
+  //   .select('.domain')
+  //   .remove();
+
+  // g.append('g')
+  //   .call(d3.axisLeft(y))
+  //   .append('text')
+  //   .attr('fill', '#000')
+  //   .attr('transform', 'rotate(-90)')
+  //   .attr('y', 6)
+  //   .attr('dy', '0.71em')
+  //   .attr('text-anchor', 'end')
+  //   .text('Rate per 100k');
+
+  // g.append('path')
+  //   .datum(data)
+  //   .attr('fill', 'none')
+  //   .attr('stroke', 'steelblue')
+  //   .attr('stroke-linejoin', 'round')
+  //   .attr('stroke-linecap', 'round')
+  //   .attr('stroke-width', 1.5)
+  //   // .attr('d', line);
